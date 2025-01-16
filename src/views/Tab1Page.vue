@@ -12,13 +12,32 @@
         </ion-toolbar>
       </ion-header>
 
-      <h1>Hello World
-      </h1>
+
+      <ion-label>
+        {{ hello }}
+      </ion-label>
+
+      <ion-buttons>
+        <ion-button @click="testclick">Test Me</ion-button>
+      </ion-buttons>
+
+
+
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonButton, IonButtons } from '@ionic/vue';
+import { ref } from 'vue';
+import tester from '../assets/database/databaseService';
+
+
+
+const testclick = async () => {
+  await tester();
+}
+
+const hello = ref<string>("Hello World");
 
 </script>
