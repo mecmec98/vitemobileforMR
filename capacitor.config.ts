@@ -1,9 +1,12 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'MeterReader',
-  webDir: 'dist'
-};
+  appId: 'ionic-app-meter-reader',
+  appName: 'meter-reader',
+  webDir: 'dist',
+  server: {
+    androidScheme: 'https'
+  },
 
+};
 export default config;
