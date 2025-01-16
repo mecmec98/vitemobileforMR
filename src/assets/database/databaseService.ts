@@ -1,60 +1,47 @@
 import { Capacitor } from '@capacitor/core';
 import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite';
+import { ref } from 'vue'
+
+const platform = Capacitor.getPlatform();
+
+const db = ref<SQLiteDBConnection>()
+const sqlite = ref<SQLiteConnection>();
 
 
-const tester = async () => {
-
-    const platform = Capacitor.getPlatform();
-    const sqlite = new SQLiteConnection(CapacitorSQLite);
-
+const InitializeSQLiteDB = async () => {
     try {
-        console.log(`platform: ${platform}`);
+        sqlite.value = new SQLiteConnection(CapacitorSQLite)
+        const ret = await sqlite.value.checkConnectionsConsistency();
+        const isConn = (await (sqlite.value.isConnection("db_meter_reader", false))).result;
 
-        //for web testing
-        if (platform === "web") {
-            // Create Jeep-sqlite stencil
-            const jeepSqliteEl = document.createElement('jeep-sqlite');
-            document.body.appendChild(jeepSqliteEl);
-            await customElements.whenDefined('jeep-sqlite');
-            console.log('after customeElemnts.whenDefined');
 
-            //Initialize the Web Store
-            await sqlite.initWebStore();
-            console.log('after initWebstore');
-
-        }
-
-        //database check
-        const ret = await sqlite.checkConnectionsConsistency();
-        const isConn = (await (sqlite.isConnection("db_vite", false))).result;
-        let db = null;
         if (ret.result && isConn) {
-            db = await sqlite.retrieveConnection("db_vite", false);
+            db.value = await sqlite.value.retrieveConnection("db_meter_reader", false);
         } else {
-            db = await sqlite.createConnection("db_vite", false, "no-encryption", 1, false);
+            db.value = await sqlite.value.createConnection("db_meter_reader", false, "no-encryption", 1, false);
         }
 
-        await db.open();
-        console.log(`db: db_vite opened`);
+        await db.value.open()
         const query = `
-           CREATE TABLE IF NOT EXISTS test (
+           CREATE TABLE IF NOT EXISTS user (
            id INTEGER PRIMARY KEY NOT NULL,
-           name TEXT NOT NULL
+           username TEXT NOT NULL
            );
            `
 
-        const res = await db.execute(query);
-        console.log(`res: ${JSON.stringify(res)}`);
+        const res = await db.value.execute(query);
+
+        //console.log(`res: ${JSON.stringify(res)}`);
         if (res.changes && res.changes.changes && res.changes.changes < 0) {
             throw new Error(`Error: execute failed`);
         }
-        await sqlite.closeConnection("db_vite", false);
-        console.log("test finished")
+
+        //await sqlite.closeConnection("db_vite", false);
+
 
     } catch (error) {
-        console.log((error as any).message);
+        console.log((error as any).message)
     }
-
 }
 
-export default (tester)
+export default (InitializeSQLiteDB)
