@@ -1,0 +1,7 @@
+{
+  "name": "MeterReader",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
