@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import { createPinia } from 'pinia'
 
 
 import { IonicVue } from '@ionic/vue';
@@ -37,6 +38,7 @@ import '@ionic/vue/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+// for TailwindCSS
 import './assets/style.css';
 
 
@@ -64,36 +66,11 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     }
 
-    //database check
-    const ret = await sqlite.checkConnectionsConsistency();
-    const isConn = (await (sqlite.isConnection("db_vite", false))).result;
-    let db = null;
-     if(ret.result && isConn) {
-      db = await sqlite.retrieveConnection("db_vite",false);
-     }else{
-      db = await sqlite.createConnection("db_vite", false,"no-encryption",1,false);
-     }
-
-     await db.open();
-     console.log (`db: db_vite opened`);
-     const query = `
-     CREATE TABLE IF NOT EXISTS test (
-     id INTEGER PRIMARY KEY NOT NULL,
-     name TEXT NOT NULL
-     );
-     `
-
-     const res = await db.execute(query);
-    console.log(`res: ${JSON.stringify(res)}`);
-    if(res.changes && res.changes.changes && res.changes.changes < 0){
-      throw new Error(`Error: execute failed`);
-    }
-    await sqlite.closeConnection("db_vite",false);
-    console.log("test finished")
-
     //Ionic app start
+    const pinia = createPinia()
     const app = createApp(App)
       .use(IonicVue)
+      .use(pinia)
       .use(router);
 
     router.isReady().then(() => {

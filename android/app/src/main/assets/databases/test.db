@@ -1,0 +1,12 @@
+-- Create a new table called 'users'
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Automatically incrementing ID
+  username TEXT NOT NULL,                -- Username (must be provided)
+  active INTEGER NOT NULL DEFAULT 0      -- Active status (0 = inactive, 1 = active)
+);
+
+-- Insert some sample data into the 'users' table
+INSERT INTO users (username, active) VALUES ('alice', 1);
+INSERT INTO users (username, active) VALUES ('bob', 0);
+INSERT INTO users (username, active) VALUES ('carol', 1);
+INSERT INTO users (username, active) VALUES ('dave', 0);
