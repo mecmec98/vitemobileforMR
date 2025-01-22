@@ -15,25 +15,34 @@ const InitializeSQLiteDB = async () => {
     try {
 
         const options = {
-            overwrite: false,         // Set to false if you want to avoid overwriting an existing database
+            overwrite: true,         // Set to false if you want to avoid overwriting an existing database
         };
-        console.log('Database path:', options);
+
+
         //give sqlite connection value
         sqlite.value = new SQLiteConnection(CapacitorSQLite)
         //copy database from assets folder in android
-        await CapacitorSQLite.copyFromAssets(options);
-        console.log('database copied')
+        // await CapacitorSQLite.copyFromAssets(options);
+        // console.log('database copied')
 
         //check connection consistency
+
+
+
+        //create the connection
+        console.log('check me')
+        const dbName = 'MRADB.dbi'
+        db.value = await sqlite.value.createConnection(dbName, false, 'no-ecryption', 1, false);
         const ret = await sqlite.value.checkConnectionsConsistency();
         if (ret.result) {
-
-            //create the connection
-            db.value = await sqlite.value.createConnection('meter_reader', false, 'no-ecryption', 1, false);
-
+            console.log(db.value)
             //open the database
             await db.value?.open();
             console.log('db opened')
+
+        } else {
+
+            throw console.error();
 
         }
         //create table for testing

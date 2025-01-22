@@ -16,15 +16,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  
+
   build: {
-      chunkSizeWarningLimit: 1000, // Adjust size (in kB) as needed
-    },
+    chunkSizeWarningLimit: 1000, // Adjust size (in kB) as needed
+
+  },
+
+  publicDir: 'public',
 
   test: {
     globals: true,
     environment: 'jsdom'
   }
 
-  
+
 })

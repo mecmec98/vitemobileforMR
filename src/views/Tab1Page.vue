@@ -83,6 +83,13 @@ const inputData = async () => {
 
 }
 
+const checkTables = async (): Promise<void> => {
+  
+  const result = await db.value?.query(`SELECT name FROM sqlite_master WHERE type='table';`);
+  console.log(result?.values)
+
+}
+
 const loadData = async (): Promise<void> => {
   if (!isConnected) {
     console.log("Database is not connected.");
@@ -189,7 +196,7 @@ const hello = ref<string>("Hello World");
 
       <ion-list class="mt-5">
         <ion-item>
-          <ion-button class="m-3" @click="loadData"><text class="p-2">Show Data</text></ion-button>
+          <ion-button class="m-3" @click="checkTables"><text class="p-2">Show Data</text></ion-button>
         </ion-item>
    
         <ion-item v-for="(item, index) in masterlist" :key="index">
